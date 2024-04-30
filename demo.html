@@ -1,0 +1,42 @@
+<html>
+<head>
+</head>
+<body>
+  <p>Generated passwords:</p>
+  <pre id="passwordsOutput"></pre>
+  <p id="timeElapsed"></p>
+
+  <script>
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function generatePasswords() {
+      var passwordsOutput = document.getElementById('passwordsOutput');
+      passwordsOutput.textContent = ''; 
+      
+      var digits = '0123456789';
+      var passwords = [];
+      
+      for (var len = 4; len <= 4; len++) {
+
+        var numCombinations = Math.pow(digits.length, len);
+        for (var i = 0; i < numCombinations; i++) {
+          var password = '';
+          var num = i;
+          // Convert current number to base 'digits.length'
+          for (var j = 0; j < len; j++) {
+            password += digits.charAt(num % digits.length);
+            num = Math.floor(num / digits.length);
+          }
+          passwords.push(password.padStart(4, '0')); 
+          passwordsOutput.textContent = passwords.slice(-5).join('\n'); 
+          await sleep(1); 
+        }
+      }
+    }
+    
+    generatePasswords();
+  </script>
+</body>
+</html>
