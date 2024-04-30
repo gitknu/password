@@ -1,0 +1,57 @@
+<html>
+<head>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            display: flex;
+            height: 100vh;
+        }
+        .matrix-text {
+            width: 48%;
+        }
+        .matrix-between {
+            width: 4%;
+            text-align: center;
+        }
+        .matrix-text, .matrix-between {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 5vh;
+            color: green;
+        }
+        .matrix-text input {
+            border: none;
+            background-color: transparent;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 5vh;
+            color: green;
+            caret-color: green;
+            outline: none;
+            font-weight: bold;
+        }
+        .blinking {
+            animation: blink-animation 1s infinite;
+        }
+        @keyframes blink-animation {
+            0% { opacity: 0; }
+            50% { opacity: 0; }
+            51% { opacity: 1; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="matrix-text"><b>Привіт, Нео. </b><input type="text" value="Введи свій пароль"><span class="blinking">|</span></div>
+    <div class="matrix-between"><b>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#</b></div>
+    <div class="matrix-text"><b>Hello 2<span class="blinking">|</span></b></div>
+    <script>
+        const blinkingLines = document.querySelectorAll('.blinking');
+        blinkingLines.forEach(line => {
+            setInterval(() => {
+                line.classList.toggle('hide');
+            }, 500); 
+        });
+    </script>
+</body>
+</html>
