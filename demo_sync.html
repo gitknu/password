@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+  <p>Generated numbers:</p>
+  <pre id="passwordsOutputDigits"></pre>
+  <p id="timeElapsedDigits"></p>
+
+  <p>Generated letters:</p>
+  <pre id="passwordsOutputLetters"></pre>
+  <p id="timeElapsedLetters"></p>
+
+  <p>Generated mixed:</p>
+  <pre id="passwordsOutputMixed"></pre>
+  <p id="timeElapsedMixed"></p>
+
+  <script>
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function generatePasswordsDigits() {
+      var passwordsOutput = document.getElementById('passwordsOutputDigits');
+      passwordsOutput.textContent = ''; 
+      var timeElapsedElement = document.getElementById('timeElapsedDigits');
+      
+      var digits = '0123456789';
+      var passwords = [];
+      
+      var startTime = new Date().getTime();
+      
+      for (var len = 3; len <= 3; len++) {
+        var numCombinations = Math.pow(digits.length, len);
+        for (var i = 0; i < numCombinations; i++) {
+          var password = '';
+          var num = i;
+          // Convert current number to base 'digits.length'
+          for (var j = 0; j < len; j++) {
+            password += digits.charAt(num % digits.length);
+            num = Math.floor(num / digits.length);
+          }
+          passwords.push(password.padStart(3, '0')); 
+          passwordsOutput.textContent = passwords.slice(-5).join('\n');
+          updateTimeElapsed(startTime, timeElapsedElement); // Update time in each iteration
+          await sleep(1); 
+        }
+      }
+    }
+
+    async function generatePasswordsLetters() {
+      var passwordsOutput = document.getElementById('passwordsOutputLetters');
+      passwordsOutput.textContent = ''; 
+      var timeElapsedElement = document.getElementById('timeElapsedLetters');
+      
+      var letters = 'abcdefghijklmnopqrstuvwxyz';
+      var passwords = [];
+      
+      var startTime = new Date().getTime();
+      
+      for (var len = 3; len <= 3; len++) {
+        var numCombinations = Math.pow(letters.length, len);
+        for (var i = 0; i < numCombinations; i++) {
+          var password = '';
+          var num = i;
+          // Convert current number to base 'letters.length'
+          for (var j = 0; j < len; j++) {
+            password += letters.charAt(num % letters.length);
+            num = Math.floor(num / letters.length);
+          }
+          passwords.push(password.padStart(3, 'a')); 
+          passwordsOutput.textContent = passwords.slice(-5).join('\n');
+          updateTimeElapsed(startTime, timeElapsedElement); // Update time in each iteration
+          await sleep(1); 
+        }
+      }
+    }
+
+    async function generatePasswordsMixed() {
+      var passwordsOutput = document.getElementById('passwordsOutputMixed');
+      passwordsOutput.textContent = ''; 
+      var timeElapsedElement = document.getElementById('timeElapsedMixed');
+      
+      var digitsAndLetters = '0123456789abcdefghijklmnopqrstuvwxyz';
+      var passwords = [];
+      
+      var startTime = new Date().getTime();
+      
+      for (var len = 3; len <= 3; len++) {
+        var numCombinations = Math.pow(digitsAndLetters.length, len);
+        for (var i = 0; i < numCombinations; i++) {
+          var password = '';
+          var num = i;
+          // Convert current number to base 'digitsAndLetters.length'
+          for (var j = 0; j < len; j++) {
+            password += digitsAndLetters.charAt(num % digitsAndLetters.length);
+            num = Math.floor(num / digitsAndLetters.length);
+          }
+          passwords.push(password.padStart(3, '0a')); 
+          passwordsOutput.textContent = passwords.slice(-5).join('\n');
+          updateTimeElapsed(startTime, timeElapsedElement); // Update time in each iteration
+          await sleep(1); 
+        }
+      }
+    }
+
+    function updateTimeElapsed(startTime, timeElapsedElement) {
+      var currentTime = new Date().getTime();
+      var timeElapsed = (currentTime - startTime) / 1000;
+      timeElapsedElement.textContent = 'Time Elapsed: ' + timeElapsed.toFixed(2) + ' seconds';
+    }
+    
+    async function generatePasswordsAndTrackTime() {
+      await Promise.all([generatePasswordsDigits(), generatePasswordsLetters(), generatePasswordsMixed()]);
+    }
+    
+    generatePasswordsAndTrackTime();
+  </script>
+</body>
+</html>
