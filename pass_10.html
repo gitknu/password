@@ -78,21 +78,23 @@ window.onload = function() {
                 clearTimeout(deleteTimer); // Clear delete timer if exists
                 deleteTimer = setTimeout(() => {
                     autoDeleteText();
-                }, 200); 
+                }, 200); // Start deleting text after 200ms if input length is less than 3
             } else {
-                clearTimeout(timer); 
-                clearTimeout(deleteTimer); 
+                // Check if the input length is 3, then activate the enter message after 2 seconds
+                clearTimeout(timer); // Clear previous timer if any
+                clearTimeout(deleteTimer); // Clear delete timer if exists
                 timer = setTimeout(() => {
                     displayText();
-                }, 2500); 
+                }, 2500); // 2 seconds delay
             }
         }
     });
 
     const enterText = document.getElementById("enter");
     const text = enterText.innerText;
-    enterText.innerText = ''; 
+    enterText.innerText = ''; // Clear the text content
 
+    // Function to display text with a delay
     async function displayText() {
         for (let i = 0; i < text.length; i++) {
             enterText.innerText += text[i];
@@ -100,6 +102,7 @@ window.onload = function() {
         }
     }
 
+    // Function to delete text from enter element with delay
     async function autoDeleteText() {
         for (let i = text.length - 1; i >= 0; i--) {
             enterText.innerText = enterText.innerText.slice(0, -1);
