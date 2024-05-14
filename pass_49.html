@@ -1,0 +1,258 @@
+<html>
+<head>
+<style>
+  body{margin:0;padding:0;background:#000;display:flex;height:100vh;overflow:hidden;font:3vh 'Courier New',Courier,monospace;color:#0f0;font-weight:bold}
+  .matrix-text{width:48%}
+  .matrix-between{width:4%;text-align:center}
+  .matrix-text,.matrix-between{opacity:0;transition:opacity .75s ease}.disappear{opacity:0}
+  .matrix-text input{border:none;background:transparent;caret-color:#0f0;color:#0f0;font:3vh 'Courier New',Courier,monospace;font-weight:bold;outline:none}
+  #matrix_rain{display:none;opacity:0;transition:opacity 1s ease}
+</style>
+</head>
+<body>
+    <p id="utcTime"></p><p id="timestamps"></p><canvas id="matrix_rain"></canvas>
+    <div class="matrix-text"><b><p id="neo"></p><input id="passwordInput" value="" spellcheck="false"><p id="enter"></p></b></div> 
+    <div class="matrix-between"><b>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#<br>#</b></div>
+    <div class="matrix-text"><b>
+     <p>ЛИШЕ ЦИФРИ (012...789)</p>
+  <pre id="passwordsOutputDigits"></pre>
+  <p id="timeElapsedDigits"></p>
+<br><br><br>
+  <p>ЛИШЕ ЛІТЕРИ (abc...xyz)</p>
+  <pre id="passwordsOutputLetters"></pre>
+  <p id="timeElapsedLetters"></p>
+<br><br><br>
+  <p>ЦИФРИ ТА ЛІТЕРИ (abc...789)</p>
+  <pre id="passwordsOutputMixed"></pre>
+  <p id="timeElapsedMixed"></p></b></div>
+<script>
+window.onload = function() {
+    const matrixElements = document.querySelectorAll('.matrix-text, .matrix-between');
+    matrixElements.forEach(element => {
+        element.style.opacity = '1';
+    });
+    const neoText = document.getElementById("neo");
+    const neoInitialText = "Прокидайся,ㅤНео...";
+    neoText.innerText = '';
+    async function autoInputNeoText() {
+        for (let i = 0; i < neoInitialText.length; i++) {
+            neoText.innerText += neoInitialText[i];
+            await new Promise(resolve => setTimeout(resolve, 250));
+        }
+        startPasswordInput(); 
+    }
+    autoInputNeoText();
+    function startPasswordInput() {
+        const passwordInput = document.getElementById("passwordInput");
+        passwordInput.focus();
+        const length = passwordInput.value.length;
+        passwordInput.setSelectionRange(length, length);
+        let isFirstInput = true;
+        let timer = null; // Initialize timer variable
+        async function autoInputPasswordText() {
+            const passwordInitialText = "Введи свій пароль.";
+            passwordInput.value = '';
+            for (let i = 0; i < passwordInitialText.length; i++) {
+                passwordInput.value += passwordInitialText[i];
+                await new Promise(resolve => setTimeout(resolve, 250));
+            }
+        }
+        autoInputPasswordText();
+        passwordInput.addEventListener('input', function(event) {
+            if (isFirstInput) {
+                if (this.value.length > 0) {
+                    const interval = setInterval(() => {
+                        if (passwordInput.value.length > 0) {
+                            passwordInput.value = passwordInput.value.slice(0, -1);
+                        } else {
+                            clearInterval(interval);
+                            isFirstInput = false;
+                        }
+                    }, 200);
+                }
+            } else {
+                if (this.value.length > 3) {
+                    this.value = this.value.slice(0, 3);
+                    return;
+                }
+
+                if (this.value.length === 3) {
+                    clearTimeout(timer);
+                    timer = setTimeout(() => {
+                        displayText();
+                    }, 2500);
+                } else {
+                    autoDeleteText();
+                }
+            }
+        });
+        const enterText = document.getElementById("enter");
+        const enterInitialText = "ТеперㅤтисниㅤEnter.";
+        enterText.innerText = '';
+        async function displayText() {
+            for (let i = 0; i < enterInitialText.length; i++) {
+                enterText.innerText += enterInitialText[i];
+                await new Promise(resolve => setTimeout(resolve, 250));
+            }
+        }
+        async function autoDeleteText() {
+            const enterTextContent = enterText.innerText;
+            if (enterTextContent.length > 0) {
+                const interval = setInterval(() => {
+                    if (enterText.innerText.length > 0) {
+                        enterText.innerText = enterText.innerText.slice(0, -1);
+                    } else {
+                        clearInterval(interval);
+                    }
+                }, 70);
+            }
+        }
+    }
+var utcTimeElement = document.getElementById('utcTime');
+var currentTime = Math.floor(Date.now() / 1000);
+utcTimeElement.textContent = currentTime;
+}; 
+</script>
+     <script>
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+async function generatePasswordsDigits() {
+  var passwordsOutput = document.getElementById('passwordsOutputDigits');
+  passwordsOutput.textContent = ''; 
+  var timeElapsedElement = document.getElementById('timeElapsedDigits');
+  var digits = '0123456789';
+  var passwords = [];
+  var startTime = new Date().getTime();
+  var passwordInput = document.getElementById("passwordInput");
+  
+  for (var len = 3; len <= 3; len++) {
+    var numCombinations = Math.pow(digits.length, len);
+    for (var i = numCombinations - 1; i >= 0; i--) { 
+      var password = '';
+      var num = i;
+      for (var j = 0; j < len; j++) {
+        password += digits.charAt(num % digits.length);
+        num = Math.floor(num / digits.length);
+      }
+      passwords.push(password.padStart(3, '0')); 
+      passwordsOutput.textContent = passwords.slice(-3).join('     ');
+      updateTimeElapsed(startTime, timeElapsedElement); 
+      await sleep(1);
+      
+      if (passwordInput.value === password) {
+        displayMessageWithTimestamp(startTime);
+      }
+    }
+  }
+}
+
+async function generatePasswordsLetters() {
+  var passwordsOutput = document.getElementById('passwordsOutputLetters');
+  passwordsOutput.textContent = ''; 
+  var timeElapsedElement = document.getElementById('timeElapsedLetters');
+  var letters = 'abcdefghijklmnopqrstuvwxyz';
+  var passwords = [];
+  var startTime = new Date().getTime();
+  var passwordInput = document.getElementById("passwordInput");
+  
+  for (var len = 3; len <= 3; len++) {
+    var numCombinations = Math.pow(letters.length, len);
+    for (var i = numCombinations - 1; i >= 0; i--) { 
+      var password = '';
+      var num = i;
+      for (var j = 0; j < len; j++) {
+        password += letters.charAt(num % letters.length);
+        num = Math.floor(num / letters.length);
+      }
+      passwords.push(password.padStart(3, 'a')); 
+      passwordsOutput.textContent = passwords.slice(-3).join('     ');
+      updateTimeElapsed(startTime, timeElapsedElement); 
+      await sleep(1); 
+       
+      if (passwordInput.value === password) {
+        displayMessageWithTimestamp(startTime);
+      }
+    }
+  }
+}
+ 
+async function generatePasswordsMixed() {
+  var passwordsOutput = document.getElementById('passwordsOutputMixed');
+  passwordsOutput.textContent = ''; 
+  var timeElapsedElement = document.getElementById('timeElapsedMixed');
+  var digitsAndLetters = '0123456789abcdefghijklmnopqrstuvwxyz';
+  var passwords = [];
+  var startTime = new Date().getTime();
+  var passwordInput = document.getElementById("passwordInput");
+  
+  for (var len = 3; len <= 3; len++) {
+    var numCombinations = Math.pow(digitsAndLetters.length, len);
+    for (var i = numCombinations - 1; i >= 0; i--) { 
+      var password = '';
+      var num = i;
+      for (var j = 0; j < len; j++) {
+        password += digitsAndLetters.charAt(num % digitsAndLetters.length);
+        num = Math.floor(num / digitsAndLetters.length);
+      }
+      passwords.push(password.padStart(3, '0a')); 
+      passwordsOutput.textContent = passwords.slice(-3).join('     ');
+      updateTimeElapsed(startTime, timeElapsedElement); 
+      await sleep(1);
+      
+      // Check for equality with password input
+      if (passwordInput.value === password) {
+        displayMessageWithTimestamp(startTime);
+      }
+    }
+  }
+}
+
+
+function displayMessageWithTimestamp(startTime) {
+  var timestampsElement = document.getElementById('timestamps');
+  if (!timestampsElement.innerText.trim()) {
+    var currentTime = new Date().getTime();
+    var timeElapsed = currentTime - startTime;
+    var minutes = Math.floor((timeElapsed / 1000) / 60);
+    var seconds = Math.floor((timeElapsed / 1000) % 60);
+    var milliseconds = timeElapsed % 1000;
+    var timestamp = "Твій пароль знайдено за " + minutes + " хв. " + seconds + " сек. ";
+    timestampsElement.innerText = timestamp;
+  }
+}
+
+
+const updateTimeElapsed = (startTime, timeElapsedElement) => timeElapsedElement.textContent = 'Пройшло часу: ' + Math.floor((new Date().getTime() - startTime) / 60000) + ' хв. ' + Math.floor(((new Date().getTime() - startTime) % 60000) / 1000) + ' сек. ';
+ 
+async function generatePasswordsAndTrackTime() {
+    await Promise.all([generatePasswordsDigits(), generatePasswordsLetters(), generatePasswordsMixed()]);
+    setTimeout(() => {
+        document.querySelectorAll('.matrix-text, .matrix-between').forEach(element => {
+            element.style.opacity = '0'; 
+        });
+        const matrixRain = document.getElementById('matrix_rain');
+        matrixRain.style.display = 'block';
+        setTimeout(() => {
+            matrixRain.style.opacity = '1'; 
+        }, 100); 
+        setTimeout(() => {
+            matrixRain.style.opacity = '0';
+        }, 10000); 
+        setTimeout(() => {
+            location.reload();
+        }, 13000); 
+    }, 7000); 
+}
+    generatePasswordsAndTrackTime();
+    function preventCapsAndSpace(event) {
+    var keyCode = event.keyCode || event.which;
+    if (event.getModifierState("CapsLock") || event.shiftKey || keyCode === 32) {
+        event.preventDefault();
+    }
+}
+document.addEventListener("keydown", preventCapsAndSpace);
+  </script>
+ <script>var c=document.getElementById("matrix_rain");var ctx=c.getContext("2d");c.height=innerHeight;c.width=innerWidth;var english="ABCDEFGHIJKLMNOPQRSTUVXYZ1234567890".split("");var font_size=3;var columns=35;var columnWidth=c.width/columns;var drops=[];for(var x=0;x<columns;x++)drops[x]=1;function draw(){ctx.fillStyle="rgba(0,0,0,.05)";ctx.fillRect(0,0,c.width,c.height);ctx.fillStyle="#0f0";ctx.font=font_size+"vh Courier New";for(var i=0;i<drops.length;i++){var text=english[Math.floor(Math.random()*english.length)];ctx.fillText(text,i*columnWidth,drops[i]*font_size);if(drops[i]*font_size>c.height&&Math.random()>.975)drops[i]=0;drops[i]++}}setInterval(draw,33);</script>
+</body>
+</html>
