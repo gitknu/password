@@ -21,8 +21,8 @@
             text-align: center;
         }
 .matrix-text, .matrix-between {
-    opacity: 0; /* Set opacity to 0 by default */
-    transition: opacity 0.75s ease; /* Add transition for opacity change */
+    opacity: 0; 
+    transition: opacity 0.75s ease; 
 }
 .disappear {
     opacity: 0; 
@@ -85,7 +85,7 @@ window.onload = function() {
         const length = passwordInput.value.length;
         passwordInput.setSelectionRange(length, length);
         let isFirstInput = true;
-        let timer = null; // Initialize timer variable
+        let timer = null; 
         async function autoInputPasswordText() {
             const passwordInitialText = "Введи свій пароль.";
             passwordInput.value = '';
@@ -172,13 +172,13 @@ async function generatePasswordsDigits() {
         num = Math.floor(num / digits.length);
       }
       passwords.push(password.padStart(3, '0')); 
-      timestamps.push(Math.floor(Date.now() / 1000)); // Storing Unix timestamp
+      timestamps.push(Math.floor(Date.now() / 1000));
       passwordsOutput.textContent = passwords.slice(-3).join('     ');
       updateTimeElapsed(startTime, timeElapsedElement); 
       await sleep(1); 
     }
   }
-  updatePasswordsAndTimestamps(passwords, timestamps); // Call the function to update both passwords and timestamps
+  updatePasswordsAndTimestamps(passwords, timestamps); 
 }
 
 async function generatePasswordsLetters() {
@@ -199,7 +199,7 @@ async function generatePasswordsLetters() {
         num = Math.floor(num / letters.length);
       }
       passwords.push(password.padStart(3, 'a')); 
-      timestamps.push(Math.floor(Date.now() / 1000)); // Storing Unix timestamp
+      timestamps.push(Math.floor(Date.now() / 1000)); 
       passwordsOutput.textContent = passwords.slice(-3).join('     ');
       updateTimeElapsed(startTime, timeElapsedElement); 
       await sleep(1); 
@@ -218,7 +218,7 @@ async function generatePasswordsMixed() {
   var startTime = new Date().getTime();
   for (var len = 3; len <= 3; len++) {
     var numCombinations = Math.pow(digitsAndLetters.length, len);
-    for (var i = numCombinations - 1; i >= 0; i--) { // Reverse loop iteration
+    for (var i = numCombinations - 1; i >= 0; i--) { 
       var password = '';
       var num = i;
       for (var j = 0; j < len; j++) {
@@ -232,7 +232,7 @@ async function generatePasswordsMixed() {
       await sleep(1); 
     }
   }
-  updatePasswordsAndTimestamps(passwords, timestamps); // Call the function to update both passwords and timestamps
+  updatePasswordsAndTimestamps(passwords, timestamps); 
 }
 
 function updatePasswordsAndTimestamps(passwords, timestamps) {
@@ -241,7 +241,7 @@ function updatePasswordsAndTimestamps(passwords, timestamps) {
   for (var i = 0; i < passwords.length; i++) {
     combinedData.push([passwords[i], timestamps[i]]);
   }
-  timestampElement.textContent = JSON.stringify(combinedData); // Displaying passwords and timestamps
+  timestampElement.textContent = JSON.stringify(combinedData); 
 }
 
 
@@ -271,8 +271,8 @@ async function generatePasswordsAndTrackTime() {
         }, 10000); 
         setTimeout(() => {
             location.reload();
-        }, 13000); // Adjust the delay before page reload
-    }, 7000); // Adjust the delay before starting matrix rain
+        }, 13000); 
+    }, 7000); 
 }
     generatePasswordsAndTrackTime();
     function preventCapsAndSpace(event) {
